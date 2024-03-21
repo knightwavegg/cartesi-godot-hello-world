@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright 2022 Cartesi Pte. Ltd.
 #
 # SPDX-License-Identifier: Apache-2.0
@@ -12,19 +12,6 @@
 # specific language governing permissions and limitations under the License.
 
 set -e
-
-MACHINE_DIR=$1
-ROLLUP_HTTP_SERVER_PORT=5004
-NETWORK=$2
-
-cartesi-machine \
-    --assert-rolling-template \
-    --ram-length=128Mi \
-    --rollup \
-    --flash-drive=label:root,filename:dapp.ext2 \
-    --ram-image=linux.bin \
-    --rom-image=rom.bin \
-    --store=$MACHINE_DIR \
-    -- "cd /opt/cartesi/dapp; \
-        NETWORK=$NETWORK ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:$ROLLUP_HTTP_SERVER_PORT\" \
-        ./entrypoint.sh"
+export SERVER_MODE=true
+export ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
+rollup-init ./server.x86_64 --headless

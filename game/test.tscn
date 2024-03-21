@@ -12,7 +12,13 @@ script = ExtResource("1_882d7")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 2
-text = "Connect Wall"
+text = "Connect Wallet
+"
 
 [node name="Button2" type="Button" parent="."]
 layout_mode = 2
+text = "Send Input"
+
+[node name="Button3" type="Button" parent="."]
+layout_mode = 2
+text = "Execute Voucher"

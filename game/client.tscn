@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://7xfab5dee7w"]
+
+[ext_resource type="PackedScene" uid="uid://u2h8kgq5523x" path="res://connect_wallet.tscn" id="1_b0rvn"]
+[ext_resource type="PackedScene" uid="uid://dxrpi4dct4ebe" path="res://explorer_client.tscn" id="2_ynh1b"]
+
+[node name="client" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Control" parent="." instance=ExtResource("1_b0rvn")]
+visible = false
+layout_mode = 1
+
+[node name="HBox" parent="." instance=ExtResource("2_ynh1b")]
+layout_mode = 1

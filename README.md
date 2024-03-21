@@ -1,43 +1,12 @@
 # cartesi-godot-hello-world
 
-This repo provides a full featured example for building a client-server application on Cartesi using Godot Engine.
+This repo provides a full featured example for building a client-server application on Cartesi using Godot Engine. It uses the Sunodo framework for building the server dApp docker image.
 
-### Features:
+Resources:
 
-- Rollup server polling with `Cartesi.query_state()`.
-- Inspect & Advance state request handling with associated signals in GDScript.
-- Publish Notices, Reports, and Vouchers.
-- Graphql API wrapper, including response object models.
-
-### TODO:
-
-- Submit inputs and execute vouchers (requires integrating ethers).
-- Deployment automation.
-
-## Run the game server
-
-### Run in docker:
-
-```
-# In hello-world/
-docker compose -f ../docker-compose.yml -f ./docker-compose.override.yml up
-```
-
-### Host mode
-
-Run Cartesi rollup:
-
-```
-# In hello-world/
-docker compose -f ../docker-compose.yml -f ./docker-compose.override.yml -f ../docker-compose-host.yml up
-```
-
-Run game server:
-
-```
-# In hello-world/game/
-SERVER_MODE=true ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004" godot --headless
-```
+- Cartesi Docs:
+- Sunodo Docs:
+-
 
 ### Run game client:
 
@@ -61,3 +30,5 @@ Then serve index.html from a web server, one good option is the npm `serve` pack
 # In the same directory as your index.html
 serve -s . --cors
 ```
+
+TX_DEFAULT_CONFIRMATIONS=1

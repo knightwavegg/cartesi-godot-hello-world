@@ -1,0 +1,128 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxrpi4dct4ebe"]
+
+[ext_resource type="Script" path="res://client.gd" id="1_0vkkt"]
+
+[node name="HBox" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_0vkkt")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+alignment = 1
+
+[node name="Inputs" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBox/Inputs"]
+layout_mode = 2
+text = "Send Message"
+horizontal_alignment = 1
+
+[node name="InputBox" type="TextEdit" parent="VBox/Inputs"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Enter message here
+"
+
+[node name="Button" type="Button" parent="VBox/Inputs"]
+layout_mode = 2
+text = "Send"
+
+[node name="HBox" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Notices" type="VBoxContainer" parent="VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox/HBox/Notices"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBox/HBox/Notices/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Notices
+"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="VBox/HBox/Notices/HBoxContainer"]
+layout_mode = 2
+text = "Refresh
+"
+
+[node name="ItemList" type="ItemList" parent="VBox/HBox/Notices"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+allow_search = false
+auto_height = true
+item_count = 3
+item_0/text = "A"
+item_0/selectable = false
+item_1/text = "B"
+item_1/selectable = false
+item_2/text = "C"
+item_2/selectable = false
+
+[node name="Reports" type="VBoxContainer" parent="VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBox/HBox/Reports"]
+layout_mode = 2
+text = "Reports
+"
+horizontal_alignment = 1
+
+[node name="ItemList" type="ItemList" parent="VBox/HBox/Reports"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+allow_search = false
+auto_height = true
+item_count = 3
+item_0/text = "A"
+item_0/selectable = false
+item_1/text = "B"
+item_1/selectable = false
+item_2/text = "C"
+item_2/selectable = false
+
+[node name="Vouchers" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Vouchers"]
+layout_mode = 2
+text = "Vouchers
+"
+horizontal_alignment = 1
+
+[node name="ItemList" type="ItemList" parent="Vouchers"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+auto_height = true
+item_count = 3
+item_0/text = "A"
+item_1/text = "B"
+item_2/text = "C"
+
+[node name="Button" type="Button" parent="Vouchers"]
+layout_mode = 2
+text = "Execute Voucher"
+
+[connection signal="pressed" from="VBox/HBox/Notices/HBoxContainer/Button" to="." method="_on_button_pressed"]

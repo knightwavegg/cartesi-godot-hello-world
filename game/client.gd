@@ -1,10 +1,11 @@
 extends Control
 
-@onready var input_box:TextEdit = $HBox/VBox/Inputs/InputBox
-@onready var voucher_list:ItemList = $HBox/Vouchers/ItemList
-@onready var notice_list:ItemList = $HBox/VBox/HBox/Notices/ItemList
-@onready var report_list:ItemList = $HBox/VBox/HBox/Reports/ItemList
+@onready var input_box:TextEdit = $VBox/Inputs/InputBox
+@onready var voucher_list:ItemList = $Vouchers/ItemList
+@onready var notice_list:ItemList = $VBox/HBox/Notices/ItemList
+@onready var report_list:ItemList = $VBox/HBox/Reports/ItemList
 @onready var ctsi_client:CartesiClient = CartesiClient.new()
+@onready var ethers_client:Ethers = Ethers.new()
 
 var notices: Array[CartesiNotice] = []
 var reports: Array[CartesiReport] = []
@@ -15,10 +16,7 @@ var inputs: Array[CartesiInput] = []
 func _ready() -> void:
 	add_child(ctsi_client)
 	print_debug("Hello from Godot")
-	inputs = await ctsi_client.list_inputs()
-	notices = await ctsi_client.list_notices()
-	reports = await ctsi_client.list_reports()
-	vouchers = await ctsi_client.list_vouchers()
+	await refresh_data()
 	_on_notices_refresh_pressed()
 	_on_reports_refresh_pressed()
 	_on_vouchers_refresh_pressed()
@@ -34,6 +32,12 @@ func _on_voucher_button_pressed() -> void:
 	
 	for v in voucher_ids:
 		print_debug("Executing voucher id: ", voucher_list.get_item_text(v))
+
+func refresh_data():
+	inputs = await ctsi_client.list_inputs()
+	notices = await ctsi_client.list_notices()
+	reports = await ctsi_client.list_reports()
+	vouchers = await ctsi_client.list_vouchers()
 
 
 func _on_notices_refresh_pressed():
@@ -53,3 +57,10 @@ func _on_vouchers_refresh_pressed():
 	for n in vouchers:
 		voucher_list.add_item(str(n.input.index) + "-" + str(n.index) + ": \"" + n.payload + "\" to " + n.destination)
 
+
+
+func _on_button_pressed():
+	await refresh_data()
+	_on_notices_refresh_pressed()
+	_on_reports_refresh_pressed()
+	_on_vouchers_refresh_pressed()

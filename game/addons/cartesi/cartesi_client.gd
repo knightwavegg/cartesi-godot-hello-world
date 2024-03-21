@@ -6,7 +6,7 @@ var gql := GQLClient.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	gql.set_endpoint(false, "localhost", 4000, "/graphql")
+	gql.set_endpoint(false, "localhost", 8080, "/graphql")
 
 
 func list_inputs(last=10) -> Array[CartesiInput]:

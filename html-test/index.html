@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="module">
+            import { ethers } from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.0/ethers.min.js";
+            window.ethers = ethers;
+            if (window.ethereum == null) {
+
+                // If MetaMask is not installed, we use the default provider,
+                // which is backed by a variety of third-party services (such
+                // as INFURA). They do not have private keys installed,
+                // so they only have read-only access
+                console.log("MetaMask not installed; using read-only defaults")
+                window.provider = ethers.getDefaultProvider()
+
+            } else {
+
+                // Connect to the MetaMask EIP-1193 object. This is a standard
+                // protocol that allows Ethers access to make all read-only
+                // requests through MetaMask.
+                window.provider = new ethers.BrowserProvider(window.ethereum)
+
+                // It also provides an opportunity to request access to write
+                // operations, which will be performed by the private key
+                // that MetaMask manages for the user.
+                window.signer = await provider.getSigner();
+                console.log("Browser provider configured")
+            }
+            const OutputValidityProof = "(uint256, uint256, bytes32, bytes32, bytes32, bytes32, bytes32[], bytes32[])"
+            const Proof = `(${OutputValidityProof}, bytes)`
+            window.input_abi = [ "function addInput(address _dapp, bytes _input)" ]
+            window.dapp_abi = [ `function executeVoucher(address _destination, bytes _payload, ${Proof} _proof)` ]
+            window.input_box = new ethers.Contract("0x59b22D57D4f067708AB0c00552767405926dc768", window.input_abi, window.provider)
+            window.dapp = new ethers.Contract("0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C", window.dapp_abi, window.provider)
+        </script>
+    </head>
+</html>

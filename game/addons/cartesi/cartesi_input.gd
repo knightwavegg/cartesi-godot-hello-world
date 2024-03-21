@@ -13,12 +13,13 @@ func _init(index: int, msgSender: String, timestamp: int, blockNumber: int, payl
 	self.blockNumber = blockNumber
 	self.payload = Cartesi.decode_hex(payload)
 
+
 static func from_dict(data: Dictionary) -> CartesiInput:
 	return CartesiInput.new(
 		data["index"],
 		data["msgSender"],
-		data["timestamp"],
-		data["blockNumber"],
+		data["timestamp"] as int,
+		data["blockNumber"] as int,
 		data["payload"]
 	)
 
