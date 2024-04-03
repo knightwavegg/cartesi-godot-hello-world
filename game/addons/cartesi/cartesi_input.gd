@@ -23,6 +23,7 @@ static func from_dict(data: Dictionary) -> CartesiInput:
 		data["payload"]
 	)
 
+
 func to_dict() -> Dictionary:
 	return {
 		index=index,
@@ -31,6 +32,7 @@ func to_dict() -> Dictionary:
 		blockNumber=blockNumber,
 		payload=payload
 	}
+
 
 func _to_string():
 	return JSON.stringify(to_dict())

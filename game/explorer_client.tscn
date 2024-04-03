@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://client.gd" id="1_0vkkt"]
 
-[node name="HBox" type="HBoxContainer"]
+[node name="ExplorerClient" type="HBoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,58 +12,65 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_0vkkt")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="Input" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
 alignment = 1
 
-[node name="Inputs" type="HBoxContainer" parent="VBox"]
+[node name="Button2" type="Button" parent="Input"]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 4
+text = "Connect Wallet"
 
-[node name="Label" type="Label" parent="VBox/Inputs"]
+[node name="Label" type="Label" parent="Input"]
 layout_mode = 2
 text = "Send Message"
 horizontal_alignment = 1
 
-[node name="InputBox" type="TextEdit" parent="VBox/Inputs"]
+[node name="MessageBox" type="TextEdit" parent="Input"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Enter message here
 "
 
-[node name="Button" type="Button" parent="VBox/Inputs"]
+[node name="Button" type="Button" parent="Input"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Send"
 
-[node name="HBox" type="HBoxContainer" parent="VBox"]
+[node name="Events" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 3.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
-[node name="Notices" type="VBoxContainer" parent="VBox/HBox"]
+[node name="Button" type="Button" parent="Events"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Refresh
+"
+
+[node name="HBox" type="HBoxContainer" parent="Events"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Notices" type="VBoxContainer" parent="Events/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBox/HBox/Notices"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Events/HBox/Notices"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBox/HBox/Notices/HBoxContainer"]
+[node name="Label" type="Label" parent="Events/HBox/Notices/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Notices
 "
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="VBox/HBox/Notices/HBoxContainer"]
-layout_mode = 2
-text = "Refresh
-"
-
-[node name="ItemList" type="ItemList" parent="VBox/HBox/Notices"]
+[node name="ItemList" type="ItemList" parent="Events/HBox/Notices"]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
@@ -77,17 +84,17 @@ item_1/selectable = false
 item_2/text = "C"
 item_2/selectable = false
 
-[node name="Reports" type="VBoxContainer" parent="VBox/HBox"]
+[node name="Reports" type="VBoxContainer" parent="Events/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBox/HBox/Reports"]
+[node name="Label" type="Label" parent="Events/HBox/Reports"]
 layout_mode = 2
 text = "Reports
 "
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="VBox/HBox/Reports"]
+[node name="ItemList" type="ItemList" parent="Events/HBox/Reports"]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
@@ -101,17 +108,18 @@ item_1/selectable = false
 item_2/text = "C"
 item_2/selectable = false
 
-[node name="Vouchers" type="VBoxContainer" parent="."]
+[node name="Vouchers" type="VBoxContainer" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Vouchers"]
+[node name="Label" type="Label" parent="Events/Vouchers"]
 layout_mode = 2
 text = "Vouchers
 "
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="Vouchers"]
+[node name="ItemList" type="ItemList" parent="Events/Vouchers"]
 layout_mode = 2
 size_flags_vertical = 3
 select_mode = 1
@@ -121,8 +129,12 @@ item_0/text = "A"
 item_1/text = "B"
 item_2/text = "C"
 
-[node name="Button" type="Button" parent="Vouchers"]
+[node name="Button" type="Button" parent="Events/Vouchers"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Execute Voucher"
 
-[connection signal="pressed" from="VBox/HBox/Notices/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Input/Button2" to="." method="_on_connect_wallet_pressed"]
+[connection signal="pressed" from="Input/Button" to="." method="_on_send_input_pressed"]
+[connection signal="pressed" from="Events/Button" to="." method="_on_refresh_button_pressed"]
+[connection signal="pressed" from="Events/Vouchers/Button" to="." method="_on_execute_voucher_pressed"]
