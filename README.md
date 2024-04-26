@@ -54,3 +54,17 @@ Simply use sunodo:
 sunodo build
 sunodo run
 ```
+
+## Deploying the MessageBoard contract
+
+The Godot server is a simple echo server: Any message it receives as an Input it emits as a Notice, Report, and a Voucher. The Voucher will publish the received message to the MessageBoard contract.
+
+To deploy the MessageBoard contract to the local chain, we use forge.
+
+```
+# 1. Start sunodo with --no-backend
+# 2. Deploy the MessageBoard contract
+#      in the contracts/ directory:
+forge create --rpc-url http://localhost:8545 --private-key <private_key> src/MessageBoard.sol:MessageBoard
+# 3. Run the game in server mode
+```

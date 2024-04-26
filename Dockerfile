@@ -1,3 +1,17 @@
+FROM --platform=linux/riscv64 riscv64/ubuntu:22.04 as cast-builder
+
+RUN apt update && apt install -y \
+  build-essential \
+  curl \
+  git
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup.sh && chmod +x rustup.sh && ./rustup.sh -y
+
+SHELL ["/bin/bash", "--login" , "-c"]
+RUN git clone https://github.com/knightwavegg/tinycast.git && \
+    cd tinycast && \
+    cargo install --path ./crates/cast --profile local --force --locked
+
 FROM --platform=linux/riscv64 knightwavegg/cartesi-godot:4.2.1-stable
 
 LABEL io.sunodo.sdk_version=0.2.0
@@ -22,6 +36,9 @@ COPY entrypoint.sh .
 
 RUN cd game && godot --headless --export-debug "Linux/X11" ../server.x86_64
 
+COPY --from=cast-builder /root/.cargo/bin /root/.cargo/bin
+
+ENV PATH="/root/.cargo/bin:$PATH"
 ENV ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
 
 ENTRYPOINT ["./entrypoint.sh"]

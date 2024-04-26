@@ -1,6 +1,7 @@
 class_name CartesiClient
 extends Node
 
+# Break out to a config file
 const OutputValidityProof = "(uint256, uint256, bytes32, bytes32, bytes32, bytes32, bytes32[], bytes32[])"
 const Proof = "(" + OutputValidityProof + ", bytes)"
 const input_abi:Array[String] = [ "function addInput(address _dapp, bytes _input)" ]
@@ -14,6 +15,7 @@ var ethers:Ethers
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# TODO: Break this out to a config file
 	gql.set_endpoint(false, "localhost", 8080, "/graphql")
 	ethers = await Ethers.new()
 	ethers.wallet_connected.connect(_on_wallet_connected)
@@ -21,6 +23,7 @@ func _ready():
 
 func _on_wallet_connected(address:String):
 	print_debug("Wallet connected: ", address)
+	# TODO: Break these out to a config file
 	input_box = ethers.get_contract("0x59b22D57D4f067708AB0c00552767405926dc768", input_abi)
 	dapp = ethers.get_contract("0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C", dapp_abi)
 
@@ -35,7 +38,7 @@ func send_input(data:String):
 
 func execute_voucher(voucher:CartesiVoucher):
 	print_debug("Executing voucher: ", str(voucher))
-	dapp.executeVoucher(voucher.destination, ethers.ethers.toUtf8Bytes(voucher.payload), voucher.proof.to_dict())
+	voucher.execute(dapp, ethers)
 
 
 func list_inputs(last=10) -> Array[CartesiInput]:
