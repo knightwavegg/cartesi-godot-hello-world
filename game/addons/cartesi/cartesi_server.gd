@@ -1,3 +1,4 @@
+class_name CartesiServer
 extends Node
 
 var ROLLUP_SERVER = OS.get_environment("ROLLUP_HTTP_SERVER_URL")
@@ -19,12 +20,12 @@ signal event_queue_flushed
 
 var handling_request = false
 
+
 func query_state():
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	http_request.request_completed.connect(self._finish_query_completed)
 
-	# Perform the HTTP request. The URL below returns a PNG image as of writing.
 	var error = http_request.request(
 		request_args.url,
 		request_args.headers,
@@ -35,7 +36,8 @@ func query_state():
 	if error != OK:
 		print("An error occurred in the HTTP request.")
 
-# Called when the HTTP request is completed.
+
+# Called when the finish HTTP request is completed.
 func _finish_query_completed(result, response_code, headers, body: PackedByteArray):
 	print_debug("finish query completed")
 	if result != HTTPRequest.RESULT_SUCCESS:
@@ -57,20 +59,33 @@ func _finish_query_completed(result, response_code, headers, body: PackedByteArr
 			print("Inspect request: ", response)
 			inspect_state_request_received.emit(payload)
 
+
 func publish_notice(payload):
 	var event = CartesiEvent.new(ROLLUP_SERVER + "/notice", request_args.headers, request_args.method, {payload=encode_hex(payload)})
 	event_queue.push_back(event)
+
 
 func publish_report(payload):
 	var event = CartesiEvent.new(ROLLUP_SERVER + "/report", request_args.headers, request_args.method, {payload=encode_hex(payload)})
 	event_queue.push_back(event)
 
-func publish_voucher(destination, payload):
+
+func publish_voucher(destination:String, function_abi:String, transaction_args:Array):
+	var cast_args = PackedStringArray(["calldata", function_abi])
+	cast_args.append("".join(PackedStringArray(transaction_args)))
+	
+	var cast_output = []
+	var exit_code = OS.execute("cast", cast_args, cast_output, true)
+	print_debug("Exit code: ", exit_code)
+	print_debug("Cast output: ", cast_output)
+
 	var event = CartesiEvent.new(ROLLUP_SERVER + "/voucher", request_args.headers, request_args.method, {
 			destination=destination,
-			payload=encode_hex(payload)
+			payload=cast_output[0]
 		})
+
 	event_queue.push_back(event)
+
 
 func flush():
 	print_debug("Flushing event queue")
@@ -81,10 +96,12 @@ func flush():
 		await event.complete
 	event_queue_flushed.emit()
 
+
 func decode_hex(data: String) -> String:
 	if data.begins_with("0x"):
 		data = data.substr(2)
 	return data.hex_decode().get_string_from_utf8()
+
 
 func encode_hex(data: String) -> String:
 	return "0x" + data.to_utf8_buffer().hex_encode()

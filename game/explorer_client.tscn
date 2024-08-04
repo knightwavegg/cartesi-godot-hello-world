@@ -17,7 +17,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Button2" type="Button" parent="Input"]
+[node name="ConnectWallet" type="Button" parent="Input"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Connect Wallet"
@@ -50,27 +50,23 @@ size_flags_horizontal = 4
 text = "Refresh
 "
 
-[node name="HBox" type="HBoxContainer" parent="Events"]
+[node name="Notices" type="VBoxContainer" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Notices" type="VBoxContainer" parent="Events/HBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Events/HBox/Notices"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Events/Notices"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="Events/HBox/Notices/HBoxContainer"]
+[node name="Label" type="Label" parent="Events/Notices/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Notices
 "
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="Events/HBox/Notices"]
+[node name="ItemList" type="ItemList" parent="Events/Notices"]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
@@ -84,17 +80,18 @@ item_1/selectable = false
 item_2/text = "C"
 item_2/selectable = false
 
-[node name="Reports" type="VBoxContainer" parent="Events/HBox"]
+[node name="Reports" type="VBoxContainer" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Events/HBox/Reports"]
+[node name="Label" type="Label" parent="Events/Reports"]
 layout_mode = 2
 text = "Reports
 "
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="Events/HBox/Reports"]
+[node name="ItemList" type="ItemList" parent="Events/Reports"]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 0
@@ -108,33 +105,12 @@ item_1/selectable = false
 item_2/text = "C"
 item_2/selectable = false
 
-[node name="Vouchers" type="VBoxContainer" parent="Events"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Events/Vouchers"]
-layout_mode = 2
-text = "Vouchers
-"
-horizontal_alignment = 1
-
-[node name="ItemList" type="ItemList" parent="Events/Vouchers"]
-layout_mode = 2
-size_flags_vertical = 3
-select_mode = 1
-auto_height = true
-item_count = 3
-item_0/text = "A"
-item_1/text = "B"
-item_2/text = "C"
-
-[node name="Button" type="Button" parent="Events/Vouchers"]
+[node name="Button2" type="Button" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Execute Voucher"
+text = "Vouchers"
 
-[connection signal="pressed" from="Input/Button2" to="." method="_on_connect_wallet_pressed"]
+[connection signal="pressed" from="Input/ConnectWallet" to="." method="_on_connect_wallet_pressed"]
 [connection signal="pressed" from="Input/Button" to="." method="_on_send_input_pressed"]
 [connection signal="pressed" from="Events/Button" to="." method="_on_refresh_button_pressed"]
-[connection signal="pressed" from="Events/Vouchers/Button" to="." method="_on_execute_voucher_pressed"]
+[connection signal="pressed" from="Events/Button2" to="." method="_on_refresh_button_pressed"]

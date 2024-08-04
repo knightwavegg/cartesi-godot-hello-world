@@ -1,19 +1,24 @@
 class_name CartesiClient
 extends Node
 
-# Break out to a config file
+const input_abi:Array[String] = [ "function addInput(address _dapp, bytes _input)" ]
+var input_box:JavaScriptObject
+
 const OutputValidityProof = "(uint256, uint256, bytes32, bytes32, bytes32, bytes32, bytes32[], bytes32[])"
 const Proof = "(" + OutputValidityProof + ", bytes)"
-const input_abi:Array[String] = [ "function addInput(address _dapp, bytes _input)" ]
 const dapp_abi:Array[String] = [ "function executeVoucher(address _destination, bytes _payload, " + Proof + "_proof)" ]
-var input_box:JavaScriptObject
 var dapp:JavaScriptObject
 
 var gql := GQLClient.new()
-
 var ethers:Ethers
 
-# Called when the node enters the scene tree for the first time.
+var input_box_address:String
+var dapp_address:String
+
+func _init(input_box_contract_address:String, dapp_contract_address:String):
+	input_box_address = input_box_contract_address
+	dapp_address = dapp_contract_address
+
 func _ready():
 	# TODO: Break this out to a config file
 	gql.set_endpoint(false, "localhost", 8080, "/graphql")
@@ -24,8 +29,8 @@ func _ready():
 func _on_wallet_connected(address:String):
 	print_debug("Wallet connected: ", address)
 	# TODO: Break these out to a config file
-	input_box = ethers.get_contract("0x59b22D57D4f067708AB0c00552767405926dc768", input_abi)
-	dapp = ethers.get_contract("0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C", dapp_abi)
+	input_box = ethers.get_contract(input_box_address, input_abi)
+	dapp = ethers.get_contract(dapp_address, dapp_abi)
 
 
 func connect_wallet():
@@ -41,9 +46,10 @@ func execute_voucher(voucher:CartesiVoucher):
 	voucher.execute(dapp, ethers)
 
 
-func list_inputs(last=10) -> Array[CartesiInput]:
+func list_inputs(args={first=10}) -> Array[CartesiInput]:
+	var gql_args = parse_gql_args(args)
 	var query = '{
-		inputs(first: 10) {
+		inputs(%s) {
 			edges {
 				node {
 					index
@@ -54,8 +60,10 @@ func list_inputs(last=10) -> Array[CartesiInput]:
 				}
 			}
 		}
-	}'
+	}' % gql_args
 	var resp = await execute_query(query)
+	# TODO: Error handling on empty response
+	print_debug("Inputs: ", JSON.stringify(resp))
 	var inputs_raw = resp["data"]["inputs"]["edges"]
 	var inputs: Array[CartesiInput] = []
 
@@ -67,9 +75,10 @@ func list_inputs(last=10) -> Array[CartesiInput]:
 	return inputs
 
 
-func list_notices(last=10) -> Array[CartesiNotice]:
-	var query = '{
-		notices(first: 10) {
+func list_notices(args={first=10}) -> Array[CartesiNotice]:
+	var gql_args = parse_gql_args(args)
+	var query = "{
+		notices(%s) {
 			edges {
 				node {
 					index
@@ -84,8 +93,11 @@ func list_notices(last=10) -> Array[CartesiNotice]:
 				}
 			}
 		}
-	}'
+	}" % gql_args
+
 	var resp = await execute_query(query)
+	# TODO: Error handling on empty response
+	print_debug("Notices: ", JSON.stringify(resp))
 	var notices_raw = resp["data"]["notices"]["edges"]
 	var notices: Array[CartesiNotice] = []
 
@@ -105,9 +117,10 @@ func execute_query(query: String) -> Dictionary:
 	return resp
 	
 
-func list_reports(last=10) -> Array[CartesiReport]:
+func list_reports(args={first=10}) -> Array[CartesiReport]:
+	var gql_args = parse_gql_args(args)
 	var query = '{
-		reports(first: 10) {
+		reports(%s) {
 			edges {
 				node {
 					index
@@ -122,8 +135,11 @@ func list_reports(last=10) -> Array[CartesiReport]:
 				}
 			}
 		}
-	}'
+	}' % gql_args
+
 	var resp = await execute_query(query)
+	# TODO: Error handling on empty response
+	print_debug("Reports: ", JSON.stringify(resp))
 	var reports_raw = resp["data"]["reports"]["edges"]
 	var reports: Array[CartesiReport] = []
 
@@ -135,9 +151,10 @@ func list_reports(last=10) -> Array[CartesiReport]:
 	return reports
 
 
-func list_vouchers(last=10) -> Array[CartesiVoucher]:
+func list_vouchers(args={first=10}) -> Array[CartesiVoucher]:
+	var gql_args = parse_gql_args(args)
 	var query = '{
-		vouchers(first: 10) {
+		vouchers(%s) {
 			edges {
 				node {
 					index
@@ -166,10 +183,12 @@ func list_vouchers(last=10) -> Array[CartesiVoucher]:
 				}
 			}
 		}
-	}'
+	}' % gql_args
+
 	var resp = await execute_query(query)
 	# TODO: This will throw an error if response is empty
 	
+	print_debug("Vouchers: ", JSON.stringify(resp))
 	var vouchers_raw = resp["data"]["vouchers"]["edges"]
 	var vouchers: Array[CartesiVoucher] = []
 	print_debug("Raw vouchers: ", vouchers_raw)
@@ -179,3 +198,21 @@ func list_vouchers(last=10) -> Array[CartesiVoucher]:
 
 	print_debug(vouchers)
 	return vouchers
+
+
+func parse_gql_args(args:Dictionary) -> String:
+	# TODO: Combine filters if multiple are specified, add error handling if incompatible ones specified
+	var args_str = "first: 10"
+	if args.has( "first" ):
+		args_str = "first: " + str(args["first"])
+	elif args.has( "last" ):
+		args_str = "last: " + str(args["last"])
+
+	if args.has( "after" ):
+		args_str = "after: " + str(args["after"])
+	elif args.has( "before" ):
+		args_str = "before: " + str(args["before"])
+
+	if args.has( "where" ):
+		args_str = "where: " + str(args["where"])
+	return args_str

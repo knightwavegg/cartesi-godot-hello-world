@@ -13,5 +13,5 @@
 
 set -e
 export SERVER_MODE=true
-export ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
+export ROLLUP_HTTP_SERVER_URL="http://localhost:8080/host-runner"
 rollup-init ./server.x86_64 --headless

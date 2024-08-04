@@ -1,10 +1,19 @@
 extends Control
 
-@onready var input_box:TextEdit = $Input/MessageBox
-@onready var voucher_list:ItemList = $Events/Vouchers/ItemList
-@onready var notice_list:ItemList = $Events/HBox/Notices/ItemList
-@onready var report_list:ItemList = $Events/HBox/Reports/ItemList
-@onready var ctsi_client:CartesiClient = CartesiClient.new()
+var INPUT_BOX_CONTRACT_ADDRESS = "0x0"#Config.get("input_box_contract_address")
+var DAPP_CONTRACT_ADDRESS = "0x0"#Config.get("dapp_contract_address")
+
+
+@onready var input_client:Control = $InputClient
+@onready var voucher_client:Control = $VoucherClient
+
+@onready var input_box:TextEdit = $InputClient/Input/MessageBox
+@onready var notice_list:ItemList = $InputClient/Events/Notices/ItemList
+@onready var report_list:ItemList = $InputClient/Events/Reports/ItemList
+
+@onready var voucher_list:ItemList = $VoucherClient/Events/Vouchers/ItemList
+
+@onready var ctsi_client:CartesiClient = CartesiClient.new(INPUT_BOX_CONTRACT_ADDRESS, DAPP_CONTRACT_ADDRESS)
 
 var notices: Array[CartesiNotice] = []
 var reports: Array[CartesiReport] = []
@@ -20,6 +29,14 @@ func _ready() -> void:
 	_on_notices_refresh_pressed()
 	_on_reports_refresh_pressed()
 	_on_vouchers_refresh_pressed()
+
+func _on_go_to_vouchers():
+	input_client.visible = false
+	voucher_client.visible = true
+
+func _on_go_to_inputs():
+	voucher_client.visible = false
+	input_client.visible = true
 
 
 func _on_connect_wallet_pressed() -> void:
@@ -56,7 +73,7 @@ func _on_send_input_pressed():
 	ctsi_client.send_input(input_box.text)
 
 
-func _on_refresh_button_pressed():
+func _on_refresh_pressed():
 	await refresh_data()
 	_on_notices_refresh_pressed()
 	_on_reports_refresh_pressed()
