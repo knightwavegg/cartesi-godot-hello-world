@@ -1,5 +1,5 @@
-class_name CartesiClient
 extends Node
+class_name CartesiClient
 
 const input_abi:Array[String] = [ "function addInput(address _dapp, bytes _input)" ]
 var input_box:JavaScriptObject
@@ -10,40 +10,33 @@ const dapp_abi:Array[String] = [ "function executeVoucher(address _destination, 
 var dapp:JavaScriptObject
 
 var gql := GQLClient.new()
-var ethers:Ethers
 
 var input_box_address:String
 var dapp_address:String
 
-func _init(input_box_contract_address:String, dapp_contract_address:String):
+func _init(input_box_contract_address:String, dapp_contract_address:String, gql_endpoint:String):
 	input_box_address = input_box_contract_address
 	dapp_address = dapp_contract_address
+	gql.set_endpoint(gql_endpoint)
+
 
 func _ready():
-	# TODO: Break this out to a config file
-	gql.set_endpoint(false, "localhost", 8080, "/graphql")
-	ethers = await Ethers.new()
-	ethers.wallet_connected.connect(_on_wallet_connected)
-
+	Ethers.wallet_connected.connect(_on_wallet_connected)
 
 func _on_wallet_connected(address:String):
 	print_debug("Wallet connected: ", address)
 	# TODO: Break these out to a config file
-	input_box = ethers.get_contract(input_box_address, input_abi)
-	dapp = ethers.get_contract(dapp_address, dapp_abi)
-
-
-func connect_wallet():
-	ethers.connect_wallet()
+	input_box = Ethers.get_contract(input_box_address, input_abi, "input_box")
+	dapp = Ethers.get_contract(dapp_address, dapp_abi, "dapp")
 
 
 func send_input(data:String):
-	input_box.addInput(dapp.target, ethers.ethers.toUtf8Bytes(data))
+	input_box.addInput(dapp.target, Ethers.to_utf8_bytes(data))
 
 
 func execute_voucher(voucher:CartesiVoucher):
 	print_debug("Executing voucher: ", str(voucher))
-	voucher.execute(dapp, ethers)
+	voucher.execute(dapp)
 
 
 func list_inputs(args={first=10}) -> Array[CartesiInput]:

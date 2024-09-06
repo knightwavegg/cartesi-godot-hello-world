@@ -36,13 +36,13 @@ func to_dict() -> Dictionary:
 		proof = proof.to_dict() if proof != null else proof
 	}
 
-func execute(dapp: JavaScriptObject, ethers: Ethers):
+func execute(dapp: JavaScriptObject):
 	#print_debug("Ohiohs:", ohiohs)
 	#var ohies:Array = proof.outputHashesInEpochSiblings.map(func(n): return ethers.ethers.toUtf8Bytes(n))
 	#print_debug("Ohies: ", ohies)
 	
 	dapp.executeVoucher(
 		destination,
-		ethers.ethers.toUtf8Bytes(payload),
+		Ethers.toUtf8Bytes(payload),
 		proof.to_js_object()
 		)

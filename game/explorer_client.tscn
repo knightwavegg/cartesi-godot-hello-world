@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dxrpi4dct4ebe"]
+[gd_scene load_steps=3 format=3 uid="uid://dxrpi4dct4ebe"]
 
-[ext_resource type="Script" path="res://client.gd" id="1_0vkkt"]
+[ext_resource type="Script" path="res://explorer_client.gd" id="1_3qlha"]
+[ext_resource type="PackedScene" uid="uid://u2h8kgq5523x" path="res://connect_wallet.tscn" id="2_d1mdp"]
 
 [node name="ExplorerClient" type="HBoxContainer"]
 anchors_preset = 15
@@ -10,17 +11,15 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_0vkkt")
+script = ExtResource("1_3qlha")
 
 [node name="Input" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="ConnectWallet" type="Button" parent="Input"]
+[node name="ConnectWallet" parent="Input" instance=ExtResource("2_d1mdp")]
 layout_mode = 2
-size_flags_horizontal = 4
-text = "Connect Wallet"
 
 [node name="Label" type="Label" parent="Input"]
 layout_mode = 2
@@ -34,7 +33,7 @@ size_flags_vertical = 3
 placeholder_text = "Enter message here
 "
 
-[node name="Button" type="Button" parent="Input"]
+[node name="Send" type="Button" parent="Input"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Send"
@@ -44,7 +43,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Button" type="Button" parent="Events"]
+[node name="Refresh" type="Button" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Refresh
@@ -105,12 +104,11 @@ item_1/selectable = false
 item_2/text = "C"
 item_2/selectable = false
 
-[node name="Button2" type="Button" parent="Events"]
+[node name="ViewVouchers" type="Button" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Vouchers"
 
-[connection signal="pressed" from="Input/ConnectWallet" to="." method="_on_connect_wallet_pressed"]
-[connection signal="pressed" from="Input/Button" to="." method="_on_send_input_pressed"]
-[connection signal="pressed" from="Events/Button" to="." method="_on_refresh_button_pressed"]
-[connection signal="pressed" from="Events/Button2" to="." method="_on_refresh_button_pressed"]
+[connection signal="pressed" from="Input/Send" to="." method="_on_send_input_pressed"]
+[connection signal="pressed" from="Events/Refresh" to="." method="_on_refresh_pressed"]
+[connection signal="pressed" from="Events/ViewVouchers" to="." method="_on_view_vouchers_pressed"]

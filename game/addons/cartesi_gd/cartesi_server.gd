@@ -50,7 +50,7 @@ func _finish_query_completed(result, response_code, headers, body: PackedByteArr
 		var response_raw = body.get_string_from_utf8()
 		print("Parsing JSON response: ", response_raw)
 		var response = JSON.parse_string(response_raw)
-		var payload = decode_hex(response["data"]["payload"])
+		var payload = Cartesi.decode_hex(response["data"]["payload"])
 		# TODO: Convert response payload from hex to string
 		if response["request_type"] == "advance_state":
 			print("Advance request: ", response)
@@ -61,12 +61,12 @@ func _finish_query_completed(result, response_code, headers, body: PackedByteArr
 
 
 func publish_notice(payload):
-	var event = CartesiEvent.new(ROLLUP_SERVER + "/notice", request_args.headers, request_args.method, {payload=encode_hex(payload)})
+	var event = CartesiEvent.new(ROLLUP_SERVER + "/notice", request_args.headers, request_args.method, {payload=Cartesi.encode_hex(payload)})
 	event_queue.push_back(event)
 
 
 func publish_report(payload):
-	var event = CartesiEvent.new(ROLLUP_SERVER + "/report", request_args.headers, request_args.method, {payload=encode_hex(payload)})
+	var event = CartesiEvent.new(ROLLUP_SERVER + "/report", request_args.headers, request_args.method, {payload=Cartesi.encode_hex(payload)})
 	event_queue.push_back(event)
 
 
@@ -95,13 +95,3 @@ func flush():
 		event.execute_request()
 		await event.complete
 	event_queue_flushed.emit()
-
-
-func decode_hex(data: String) -> String:
-	if data.begins_with("0x"):
-		data = data.substr(2)
-	return data.hex_decode().get_string_from_utf8()
-
-
-func encode_hex(data: String) -> String:
-	return "0x" + data.to_utf8_buffer().hex_encode()
