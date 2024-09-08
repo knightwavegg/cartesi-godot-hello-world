@@ -57,6 +57,7 @@ func is_wallet_available() -> bool:
 
 
 func to_utf8_bytes(data:String):
+	print_debug("Converting ", data, " to utf8 bytes")
 	return ethers.toUtf8Bytes(data)
 
 

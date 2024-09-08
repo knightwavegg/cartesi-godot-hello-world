@@ -15,7 +15,7 @@ func _init(url:String, headers:PackedStringArray, method:int, request_data:Dicti
 
 
 func execute_request():
-	print_debug("Executing request")
+	print_debug("Sending request to ", url, " with data ", JSON.stringify(request_data))
 	var http_request = HTTPRequest.new()
 	http_request.request_completed.connect(_request_completed)
 	add_child(http_request)

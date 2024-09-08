@@ -40,9 +40,10 @@ COPY game game/
 
 RUN cd game && godot --headless --export-debug "Linux/X11" ../server.x86_64
 
-COPY --from=cast-builder /root/.cargo/bin /root/.cargo/bin
+COPY --from=cast-builder /root/.cargo/bin /dapp/.cargo/bin
 
-ENV PATH="/root/.cargo/bin:$PATH"
+ENV PATH="/dapp/.cargo/bin:$PATH"
+
 ENV SERVER_MODE="true"
 ENV ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:5004"
 

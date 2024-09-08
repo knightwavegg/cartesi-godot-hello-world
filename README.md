@@ -1,22 +1,16 @@
 # cartesi-godot-hello-world
 
-This repo provides a full featured example for building a client-server application on Cartesi using Godot Engine. It uses the Sunodo framework for building the server dApp docker image.
+This repo provides a full featured example for building a client-server application on Cartesi using Godot Engine. It uses the cartesi framework for building the server dApp docker image.
 
 Resources:
 
 - Cartesi Docs:
-- Sunodo Docs:
 
 ## Run game client:
 
-For interfacing with the GraphQL API, you can run the client as a desktop release:
+Input and Voucher handling requires ethers.js, so the game client can only run in the browser.
 
-```
-# In game/
-godot
-```
-
-Input and Voucher handling requires ethers.js, and thus must be exported for the Web.
+### Running in the Godot Editor
 
 ```
 # In game/ run:
@@ -34,10 +28,10 @@ serve -s . --cors
 
 ### Host Mode
 
-First, run sunodo without the backend dapp:
+First, run cartesi without the backend dapp:
 
 ```
-sunodo run --no-backend
+cartesi run --no-backend
 ```
 
 Then, run the game in server mode:
@@ -48,23 +42,26 @@ ROLLUP_HTTP_SERVER_URL="http://127.0.0.1:8080/host-runner" SERVER_MODE=true godo
 
 ### Running as a docker image
 
-Simply use sunodo:
+Simply use cartesi:
 
 ```
-sunodo build
-sunodo run
+cartesi build
+cartesi run
 ```
 
-## Deploying the MessageBoard contract
+## Using the MessageBoard contract
 
 The Godot server is a simple echo server: Any message it receives as an Input it emits as a Notice, Report, and a Voucher. The Voucher will publish the received message to the MessageBoard contract.
 
 To deploy the MessageBoard contract to the local chain, we use forge.
 
 ```
-# 1. Start sunodo with --no-backend
+# 1. Start cartesi with --no-backend
 # 2. Deploy the MessageBoard contract
 #      in the contracts/ directory:
 forge create --rpc-url http://localhost:8545 --private-key <private_key> src/MessageBoard.sol:MessageBoard
 # 3. Run the game in server mode
+# 4. Make sure the local network is added to your browser wallet
+# 5. Grab one of the private keys for the wallets cartesi generates and import it to your browser wallet
+# 6. Run the game client
 ```

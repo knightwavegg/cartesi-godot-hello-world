@@ -9,7 +9,7 @@ var proof: CartesiProof
 func _init(index: int, destination: String, payload: String, input: CartesiInput, proof: CartesiProof):
 	self.index = index
 	self.destination = destination
-	self.payload = Cartesi.decode_hex(payload)
+	self.payload = payload
 	self.input = input
 	self.proof = proof
 
@@ -36,13 +36,18 @@ func to_dict() -> Dictionary:
 		proof = proof.to_dict() if proof != null else proof
 	}
 
+var gas_callback = JavaScriptBridge.create_callback(_gas_callback)
+
+func _gas_callback(args):
+	print_debug("Gas response: ", JSON.stringify(args))
+
 func execute(dapp: JavaScriptObject):
-	#print_debug("Ohiohs:", ohiohs)
-	#var ohies:Array = proof.outputHashesInEpochSiblings.map(func(n): return ethers.ethers.toUtf8Bytes(n))
-	#print_debug("Ohies: ", ohies)
-	
-	dapp.executeVoucher(
-		destination,
-		Ethers.toUtf8Bytes(payload),
-		proof.to_js_object()
-		)
+	var jsonif = JavaScriptBridge.get_interface("JSON")
+	var proof_obj = proof.to_js_object()
+	print_debug("executing voucher, destination ", destination)
+	print_debug("payload ", payload)
+	print_debug("proof ", jsonif.stringify(proof_obj))
+	dapp.executeVoucher.estimateGas( destination, payload, proof_obj).then(gas_callback)
+	print_debug("Gas estimated, running tx")
+
+	dapp.executeVoucher( destination, payload, proof_obj)

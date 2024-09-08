@@ -81,7 +81,7 @@ func publish_voucher(destination:String, function_abi:String, transaction_args:A
 
 	var event = CartesiEvent.new(ROLLUP_SERVER + "/voucher", request_args.headers, request_args.method, {
 			destination=destination,
-			payload=cast_output[0]
+			payload=cast_output[0].trim_suffix("\n")
 		})
 
 	event_queue.push_back(event)

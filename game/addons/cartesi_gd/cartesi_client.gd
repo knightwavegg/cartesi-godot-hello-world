@@ -192,6 +192,33 @@ func list_vouchers(args={first=10}) -> Array[CartesiVoucher]:
 	print_debug(vouchers)
 	return vouchers
 
+func get_voucher_proof(voucher_index:int, input_index:int) -> CartesiProof:
+	var query = '{
+		voucher(voucherIndex:%d, inputIndex:%d) {
+			index
+				proof {
+					context
+					validity {
+						inputIndexWithinEpoch
+						outputIndexWithinInput
+						outputHashesRootHash
+						vouchersEpochRootHash
+						noticesEpochRootHash
+						machineStateHash
+						outputHashInOutputHashesSiblings
+						outputHashesInEpochSiblings
+					}
+				}
+		}
+	}' % [voucher_index, input_index]
+	var resp = await execute_query(query)
+	# TODO: This will throw an error if response is empty
+	
+	print_debug("Voucher proof: ", JSON.stringify(resp))
+	var voucher_raw = resp["data"]["voucher"]
+	print_debug("Raw voucher: ", voucher_raw)
+	return null
+
 
 func parse_gql_args(args:Dictionary) -> String:
 	# TODO: Combine filters if multiple are specified, add error handling if incompatible ones specified

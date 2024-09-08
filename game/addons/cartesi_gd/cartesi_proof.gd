@@ -71,5 +71,5 @@ func to_js_object():
 	obj[0] = validity
 	obj[1] = context
 	var console = JavaScriptBridge.get_interface("console")
-	console.log(obj)
+	console.log(obj.toString())
 	return obj
