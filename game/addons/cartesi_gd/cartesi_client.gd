@@ -4,7 +4,7 @@ class_name CartesiClient
 const input_abi:Array[String] = [ "function addInput(address _dapp, bytes _input)" ]
 var input_box:JavaScriptObject
 
-const OutputValidityProof = "(uint256, uint256, bytes32, bytes32, bytes32, bytes32, bytes32[], bytes32[])"
+const OutputValidityProof = "(uint64, uint64, bytes32, bytes32, bytes32, bytes32, bytes32[], bytes32[])"
 const Proof = "(" + OutputValidityProof + ", bytes)"
 const dapp_abi:Array[String] = [ "function executeVoucher(address _destination, bytes _payload, " + Proof + "_proof)" ]
 var dapp:JavaScriptObject
