@@ -12,8 +12,8 @@ signal wallet_connected(address:String)
 
 
 func _ready():
-	print_debug("Readying EthersGD")
 	if OS.has_feature("web"):
+		print_debug("Readying EthersGD")
 		ethereum = JavaScriptBridge.get_interface("ethereum")
 		if ethereum:
 			print_debug("Found ethereum interface.")

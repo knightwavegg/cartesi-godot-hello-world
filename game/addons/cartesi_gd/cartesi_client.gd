@@ -24,7 +24,6 @@ func _ready():
 	Ethers.wallet_connected.connect(_on_wallet_connected)
 
 func _on_wallet_connected(address:String):
-	print_debug("Wallet connected: ", address)
 	# TODO: Break these out to a config file
 	input_box = Ethers.get_contract(input_box_address, input_abi, "input_box")
 	dapp = Ethers.get_contract(dapp_address, dapp_abi, "dapp")

@@ -53,28 +53,28 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Execute Voucher"
 
-[node name="ContractOutput" type="VBoxContainer" parent="Events"]
+[node name="MessageBoard" type="VBoxContainer" parent="Events"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Events/ContractOutput"]
+[node name="Label" type="Label" parent="Events/MessageBoard"]
 layout_mode = 2
 text = "Message Board Contract
 "
 horizontal_alignment = 1
 
-[node name="ItemList" type="ItemList" parent="Events/ContractOutput"]
+[node name="ItemList" type="ItemList" parent="Events/MessageBoard"]
 layout_mode = 2
 size_flags_vertical = 3
 select_mode = 1
 auto_height = true
 
-[node name="ViewInputs" type="Button" parent="Events/ContractOutput"]
+[node name="ViewInputs" type="Button" parent="Events/MessageBoard"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Back To Inputs"
 
 [connection signal="pressed" from="HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
 [connection signal="pressed" from="Events/Vouchers/ExecuteVoucher" to="." method="_on_execute_voucher_pressed"]
-[connection signal="pressed" from="Events/ContractOutput/ViewInputs" to="." method="_on_view_inputs_pressed"]
+[connection signal="pressed" from="Events/MessageBoard/ViewInputs" to="." method="_on_view_inputs_pressed"]
